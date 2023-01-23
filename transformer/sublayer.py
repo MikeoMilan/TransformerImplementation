@@ -2,11 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-def initialize_weight(x):
-    nn.init.xavier_uniform_(x.weight)
-    if x.bias is not None:
-        nn.init.constant_(x.bias, 0)
-
 
 class ScaledDotProductAttention(nn.Module):
     def __init__(self, temperature, attn_dropout=0.1):
@@ -37,10 +32,7 @@ class MultiHeadAttention(nn.Module):
         self.w_ks = nn.Linear(d_model, n_head * d_k, bias=False)
         self.w_vs = nn.Linear(d_model, n_head * d_v, bias=False)
         self.fc = nn.Linear(n_head * d_v, d_model, bias=False)
-        initialize_weight(self.w_qs)
-        initialize_weight(self.w_ks)
-        initialize_weight(self.w_vs)
-        initialize_weight(self.fc)
+
 
         self.attention = ScaledDotProductAttention(temperature=d_k ** 0.5)
         self.dropout = nn.Dropout(dropout)
@@ -81,8 +73,7 @@ class PositionwiseFeedForward(nn.Module):
         super(PositionwiseFeedForward).__init__()
         self.w_1 = nn.Linear(d_in, d_hid) # position-wise
         self.w_2 = nn.Linear(d_hid, d_in) # position-wise
-        initialize_weight(self.w_1)
-        initialize_weight(self.w_2)
+
 
         self.layer_norm = nn.LayerNorm(d_in, eps=1e-6)
         self.dropout = nn.Dropout(dropout)
