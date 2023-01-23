@@ -41,6 +41,13 @@ class Transformer(nn.Module):
             device,
             max_length,
         )
+        
+        
+        # initialize all parameters in Xavier Uniform Distribution 
+        for p in self.parameters():
+            if p.dim() > 1:
+                nn.init.xavier_uniform_(p)
+
 
         self.src_pad_idx = src_pad_idx
         self.trg_pad_idx = trg_pad_idx
@@ -63,6 +70,8 @@ class Transformer(nn.Module):
         trg_mask = self.make_trg_mask(trg)
         enc_src = self.encoder(src, src_mask)
         out = self.decoder(trg, enc_src, src_mask, trg_mask)
+        for p in self.parameters():
+            print(p)
         return out
 
 
