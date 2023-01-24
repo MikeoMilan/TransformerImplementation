@@ -70,8 +70,7 @@ class Transformer(nn.Module):
         trg_mask = self.make_trg_mask(trg)
         enc_src = self.encoder(src, src_mask)
         out = self.decoder(trg, enc_src, src_mask, trg_mask)
-        for p in self.parameters():
-            print(p)
+
         return out
 
 
